@@ -1,0 +1,56 @@
+[
+  {
+    "title": "NASA's New Rover Successfully Lands on Mars",
+    "description": "The latest mission to Mars has achieved a successful landing, promising new discoveries about the red planet's geological history.",
+    "url": "https://example.com/news/mars-landing",
+    "urlToImage": "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=1000&auto=format&fit=crop",
+    "source": { "name": "Space News" },
+    "publishedAt": "2024-05-15T10:00:00Z",
+    "category": "Science"
+  },
+  {
+    "title": "Tech Giant Unveils Revolutionary AI Assistant",
+    "description": "A new AI assistant capable of understanding complex human emotions and contexts was unveiled today, setting a new industry standard.",
+    "url": "https://example.com/news/ai-assistant",
+    "urlToImage": "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000&auto=format&fit=crop",
+    "source": { "name": "Tech Crunch" },
+    "publishedAt": "2024-05-14T14:30:00Z",
+    "category": "Technology"
+  },
+  {
+    "title": "Global Markets Rally Amidst Economic Recovery Hopes",
+    "description": "Stock markets around the world saw significant gains today as positive economic data bolstered hopes for a swift recovery.",
+    "url": "https://example.com/news/market-rally",
+    "urlToImage": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1000&auto=format&fit=crop",
+    "source": { "name": "Financial Times" },
+    "publishedAt": "2024-05-14T09:15:00Z",
+    "category": "Business"
+  },
+  {
+    "title": "Local Team Wins Championship After 20-Year Drought",
+    "description": "In a stunning upset, the local sports team secured the championship title, ending a two-decade-long drought and sending fans into a frenzy.",
+    "url": "https://example.com/news/championship-win",
+    "urlToImage": "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1000&auto=format&fit=crop",
+    "source": { "name": "Sports Illustrated" },
+    "publishedAt": "2024-05-13T21:45:00Z",
+    "category": "Sports"
+  },
+  {
+    "title": "New Study Highlights Benefits of Mediterranean Diet",
+    "description": "A comprehensive new study reaffirms the long-term health benefits of the Mediterranean diet, particularly for heart health.",
+    "url": "https://example.com/news/mediterranean-diet",
+    "urlToImage": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1000&auto=format&fit=crop",
+    "source": { "name": "Health Weekly" },
+    "publishedAt": "2024-05-12T08:00:00Z",
+    "category": "Health"
+  },
+  {
+    "title": "International Summit Focuses on Climate Change",
+    "description": "Leaders from around the globe gathered today to discuss aggressive new strategies for combating climate change.",
+    "url": "https://example.com/news/climate-summit",
+    "urlToImage": "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?q=80&w=1000&auto=format&fit=crop",
+    "source": { "name": "Global News" },
+    "publishedAt": "2024-05-11T12:00:00Z",
+    "category": "World"
+  }
+]
