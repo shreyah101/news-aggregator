@@ -46,11 +46,13 @@ const fetchNews = async (url, category = null, query = null) => {
     });
 
     if (response.data.status === 'ok') {
-      // Map standard NewsAPI response to our format
-      return response.data.articles.map(article => ({
-        ...article,
-        category: category || 'General' // Assign a category if known, else General
-      }));
+      // Map and filter out removed/placeholder articles that NewsAPI returns
+      return response.data.articles
+        .filter(article => article.title && article.title !== '[Removed]' && article.url)
+        .map(article => ({
+          ...article,
+          category: category || 'General' // Assign a category if known, else General
+        }));
     } else {
        console.log('NewsAPI returned non-ok status, using sample data.');
        return getSampleNews(category, query);
@@ -88,7 +90,9 @@ const searchNews = async (req, res) => {
   if (!q) {
     return res.status(400).json({ message: 'Search query is required' });
   }
-  const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(q)}`;
+  // sortBy=relevancy ensures results match the query, not just the latest articles
+  // language=en filters to English articles only
+  const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(q)}&sortBy=relevancy&language=en&pageSize=20`;
   const news = await fetchNews(url, null, q);
   res.json(news);
 };
