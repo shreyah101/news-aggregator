@@ -2,16 +2,17 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
+const CATEGORIES = ['General', 'Technology', 'Business', 'Sports', 'Health', 'Science', 'Entertainment'];
+
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [preferredCategories, setPreferredCategories] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const categories = ['General', 'Technology', 'Business', 'Sports', 'Health', 'Science', 'Entertainment'];
 
   const handleCategoryChange = (category) => {
     if (preferredCategories.includes(category)) {
@@ -24,6 +25,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       await register(name, email, password, preferredCategories.length ? preferredCategories : ['General']);
       navigate('/');
@@ -33,79 +35,104 @@ const Register = () => {
       } else {
         setError(err.response?.data?.message || 'Failed to register');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white p-8 border rounded-xl shadow-sm">
-      <h2 className="text-2xl font-bold text-center mb-6">Create an Account</h2>
-      
-      {error && <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">{error}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
-          <input 
-            type="text" 
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary-500"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-          <input 
-            type="email" 
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary-500"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Password (min 6 chars)</label>
-          <input 
-            type="password" 
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary-500"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-          />
+    <div className="flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-sm sm:max-w-md bg-white p-6 sm:p-8 border rounded-2xl shadow-sm">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Create Account</h1>
+          <p className="text-gray-500 text-sm mt-1">Join NewsAgg and personalize your feed</p>
         </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Preferred Categories (Optional)</label>
-          <div className="flex flex-wrap gap-2">
-            {categories.map(category => (
-              <button
-                key={category}
-                type="button"
-                onClick={() => handleCategoryChange(category)}
-                className={`px-3 py-1 rounded-full text-sm border transition-colors ${
-                  preferredCategories.includes(category) 
-                    ? 'bg-primary-600 text-white border-primary-600' 
-                    : 'bg-white text-gray-600 border-gray-300 hover:border-primary-500'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+        {error && (
+          <div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-lg mb-5 text-sm">
+            {error}
           </div>
-        </div>
+        )}
 
-        <button 
-          type="submit" 
-          className="w-full bg-primary-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors"
-        >
-          Sign Up
-        </button>
-      </form>
-      
-      <p className="mt-4 text-center text-sm text-gray-600">
-        Already have an account? <Link to="/login" className="text-primary-600 hover:underline">Login</Link>
-      </p>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 text-sm font-semibold mb-1.5">Full Name</label>
+            <input
+              type="text"
+              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+              placeholder="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 text-sm font-semibold mb-1.5">Email</label>
+            <input
+              type="email"
+              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 text-sm font-semibold mb-1.5">Password <span className="font-normal text-gray-400">(min 6 characters)</span></label>
+            <input
+              type="password"
+              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              autoComplete="new-password"
+            />
+          </div>
+
+          {/* Category Preferences */}
+          <div>
+            <label className="block text-gray-700 text-sm font-semibold mb-2">
+              Interests <span className="font-normal text-gray-400">(optional)</span>
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map(category => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => handleCategoryChange(category)}
+                  className={`px-3 py-1.5 rounded-full text-xs sm:text-sm border transition-colors ${
+                    preferredCategories.includes(category)
+                      ? 'bg-primary-600 text-white border-primary-600'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-primary-400'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-primary-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed text-sm sm:text-base mt-2"
+          >
+            {loading ? 'Creating Account...' : 'Create Account'}
+          </button>
+        </form>
+
+        <p className="mt-5 text-center text-sm text-gray-500">
+          Already have an account?{' '}
+          <Link to="/login" className="text-primary-600 font-semibold hover:underline">
+            Sign in
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
