@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import SplashScreen from './components/SplashScreen';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -14,6 +15,29 @@ import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+  const [splashProgress, setSplashProgress] = useState(0);
+
+  useEffect(() => {
+    const progressTimer = setInterval(() => {
+      setSplashProgress((currentProgress) => Math.min(currentProgress + 5, 100));
+    }, 90);
+
+    const splashTimer = setTimeout(() => {
+      setSplashProgress(100);
+      setShowSplash(false);
+    }, 2000);
+
+    return () => {
+      clearInterval(progressTimer);
+      clearTimeout(splashTimer);
+    };
+  }, []);
+
+  if (showSplash) {
+    return <SplashScreen progress={splashProgress} />;
+  }
+
   return (
     <AuthProvider>
       <Router>
@@ -50,3 +74,4 @@ function App() {
 }
 
 export default App;
+

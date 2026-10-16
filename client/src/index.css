@@ -4,18 +4,89 @@
 
 @layer base {
   html {
-    @apply text-base;
+    @apply text-base scroll-smooth;
     -webkit-text-size-adjust: 100%;
   }
   body {
-    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+    @apply bg-[#FAF6F0] text-[#2B231D] font-sans antialiased;
+    background-color: #FAF6F0;
+    /* Subtle warm paper grain feeling */
+    background-image: radial-gradient(#E8DFC8 0.75px, transparent 0.75px), radial-gradient(#E8DFC8 0.75px, #FAF6F0 0.75px);
+    background-size: 32px 32px;
+    background-position: 0 0, 16px 16px;
   }
   * {
     @apply box-border;
   }
 }
 
+/* Custom Cozy Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF6F0;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8CCC0;
+  border-radius: 9999px;
+  border: 2px solid #FAF6F0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C4B5A5;
+}
+
+/* Hide scrollbar on category filters while retaining smooth scroll */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Cozy Micro-animations */
+@keyframes steamSwirl {
+  0% {
+    transform: translateY(0) scaleX(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-8px) scaleX(1.15) rotate(4deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-16px) scaleX(0.9) rotate(-3deg);
+    opacity: 0;
+  }
+}
+
+.animate-steam {
+  animation: steamSwirl 2.4s ease-out infinite;
+}
+
+.animate-steam-delayed {
+  animation: steamSwirl 2.4s ease-out infinite 0.9s;
+}
+
+@keyframes ribbonPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25) rotate(-6deg); }
+  100% { transform: scale(1); }
+}
+
+.animate-ribbon {
+  animation: ribbonPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 @layer utilities {
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

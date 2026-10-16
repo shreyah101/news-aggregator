@@ -7,10 +7,14 @@ import { useNavigate } from 'react-router-dom';
 const BookmarkButton = ({ article, isSaved = false, onRemove }) => {
   const [saved, setSaved] = useState(isSaved);
   const [loading, setLoading] = useState(false);
+  const [justToggled, setJustToggled] = useState(false);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleToggleBookmark = async () => {
+  const handleToggleBookmark = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!user) {
       navigate('/login');
       return;
@@ -21,6 +25,8 @@ const BookmarkButton = ({ article, isSaved = false, onRemove }) => {
       if (saved && article._id) {
         await api.delete(`/bookmarks/${article._id}`);
         setSaved(false);
+        setJustToggled(true);
+        setTimeout(() => setJustToggled(false), 500);
         if (onRemove) onRemove(article._id);
       } else if (!saved) {
         await api.post('/bookmarks', {
@@ -33,6 +39,8 @@ const BookmarkButton = ({ article, isSaved = false, onRemove }) => {
           category: article.category
         });
         setSaved(true);
+        setJustToggled(true);
+        setTimeout(() => setJustToggled(false), 500);
       }
     } catch (error) {
       console.error('Error toggling bookmark', error);
@@ -43,13 +51,27 @@ const BookmarkButton = ({ article, isSaved = false, onRemove }) => {
   };
 
   return (
-    <button 
-      onClick={handleToggleBookmark} 
+    <button
+      onClick={handleToggleBookmark}
       disabled={loading}
-      className={`p-1.5 rounded-full transition-colors ${saved ? 'text-primary-600 bg-primary-50' : 'text-gray-400 hover:text-primary-600 hover:bg-primary-50'}`}
-      title={saved ? "Remove bookmark" : "Save article"}
+      aria-label={saved ? "Remove bookmark" : "Save article to bookshelf"}
+      title={saved ? "Saved to your bookshelf (Click to remove)" : "Save to bookshelf"}
+      className={`relative inline-flex items-center justify-center p-2 rounded-xl transition-all duration-200 group active:scale-90 ${
+        saved
+          ? 'bg-[#FAECE5] text-[#C65D42] shadow-sm hover:bg-[#F5D6C6]'
+          : 'bg-[#FAF6F0] text-[#736257] hover:bg-[#FAECE5] hover:text-[#C65D42] border border-[#EBE3D7]'
+      } ${justToggled ? 'animate-ribbon' : ''}`}
     >
-      {saved ? <BookmarkCheck className="w-5 h-5" /> : <BookmarkIcon className="w-5 h-5" />}
+      {saved ? (
+        <BookmarkCheck className="w-4 h-4 fill-[#C65D42]/20 stroke-[2.2]" />
+      ) : (
+        <BookmarkIcon className="w-4 h-4 stroke-[1.8] group-hover:scale-110 transition-transform" />
+      )}
+      
+      {/* Tiny Ribbon Notch Visual Indicator when saved */}
+      {saved && (
+        <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#E07A5F] ring-2 ring-white" />
+      )}
     </button>
   );
 };

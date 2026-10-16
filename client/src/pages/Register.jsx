@@ -1,8 +1,17 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { User, Mail, Lock, Coffee, Check, AlertCircle } from 'lucide-react';
 
-const CATEGORIES = ['General', 'Technology', 'Business', 'Sports', 'Health', 'Science', 'Entertainment'];
+const CATEGORIES = [
+  { name: 'General' },
+  { name: 'Technology' },
+  { name: 'Business' },
+  { name: 'Sports' },
+  { name: 'Health' },
+  { name: 'Science' },
+  { name: 'Entertainment' }
+];
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -33,7 +42,7 @@ const Register = () => {
       if (err.response?.data?.errors) {
         setError(err.response.data.errors.map(e => e.msg).join(', '));
       } else {
-        setError(err.response?.data?.message || 'Failed to register');
+        setError(err.response?.data?.message || 'Failed to issue your reading pass. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -42,96 +51,140 @@ const Register = () => {
 
   return (
     <div className="flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-sm sm:max-w-md bg-white p-6 sm:p-8 border rounded-2xl shadow-sm">
+      <div className="w-full max-w-lg bg-white p-7 sm:p-10 border border-[#EBE3D7] rounded-3xl shadow-cozy-md relative overflow-hidden">
+        
+        {/* Soft background glow */}
+        <div className="absolute -top-16 -right-16 w-36 h-36 bg-[#FAECE5] rounded-full blur-2xl pointer-events-none" />
+
         {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Create Account</h1>
-          <p className="text-gray-500 text-sm mt-1">Join NewsAgg and personalize your feed</p>
+        <div className="text-center mb-8 relative z-10">
+          <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#E07A5F] to-[#C65D42] text-white flex items-center justify-center shadow-cozy-sm">
+            <Coffee className="w-7 h-7" />
+          </div>
+
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAECE5] text-[#C65D42] text-xs font-mono font-semibold uppercase tracking-wider mb-2">
+            <span>Reader Application</span>
+          </div>
+
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#2B231D]">
+            Join the Reader's Circle
+          </h1>
+          <p className="font-serif italic text-xs sm:text-sm text-[#736257] mt-1">
+            "Your morning sanctuary for thoughtful reading and personalized news."
+          </p>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-lg mb-5 text-sm">
-            {error}
+          <div className="bg-red-50 border border-red-200 text-red-700 p-3.5 rounded-2xl mb-6 text-xs sm:text-sm flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
           <div>
-            <label className="block text-gray-700 text-sm font-semibold mb-1.5">Full Name</label>
-            <input
-              type="text"
-              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              autoComplete="name"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 text-sm font-semibold mb-1.5">Email</label>
-            <input
-              type="email"
-              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700 text-sm font-semibold mb-1.5">Password <span className="font-normal text-gray-400">(min 6 characters)</span></label>
-            <input
-              type="password"
-              className="w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              autoComplete="new-password"
-            />
+            <label className="block text-xs font-mono font-semibold uppercase tracking-wider text-[#736257] mb-2">
+              Your Full Name
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                className="w-full pl-10 pr-4 py-3 bg-[#FAF6F0] border border-[#EBE3D7] rounded-xl text-sm text-[#2B231D] placeholder-[#A8988B] focus:outline-none focus:ring-2 focus:ring-[#E07A5F]/40 focus:border-[#E07A5F] transition-all"
+                placeholder="Eleanor Vance"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+              <User className="absolute left-3.5 top-3.5 h-4 w-4 text-[#A8988B]" />
+            </div>
           </div>
 
-          {/* Category Preferences */}
           <div>
-            <label className="block text-gray-700 text-sm font-semibold mb-2">
-              Interests <span className="font-normal text-gray-400">(optional)</span>
+            <label className="block text-xs font-mono font-semibold uppercase tracking-wider text-[#736257] mb-2">
+              Email Address
             </label>
+            <div className="relative">
+              <input
+                type="email"
+                className="w-full pl-10 pr-4 py-3 bg-[#FAF6F0] border border-[#EBE3D7] rounded-xl text-sm text-[#2B231D] placeholder-[#A8988B] focus:outline-none focus:ring-2 focus:ring-[#E07A5F]/40 focus:border-[#E07A5F] transition-all"
+                placeholder="eleanor@morningdispatch.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+              />
+              <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-[#A8988B]" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-mono font-semibold uppercase tracking-wider text-[#736257] mb-2">
+              Passkey / Password <span className="normal-case font-normal text-[#A8988B]">(at least 6 characters)</span>
+            </label>
+            <div className="relative">
+              <input
+                type="password"
+                className="w-full pl-10 pr-4 py-3 bg-[#FAF6F0] border border-[#EBE3D7] rounded-xl text-sm text-[#2B231D] placeholder-[#A8988B] focus:outline-none focus:ring-2 focus:ring-[#E07A5F]/40 focus:border-[#E07A5F] transition-all"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                autoComplete="new-password"
+              />
+              <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-[#A8988B]" />
+            </div>
+          </div>
+
+          {/* Preferred Categories */}
+          <div>
+            <label className="block text-xs font-mono font-semibold uppercase tracking-wider text-[#736257] mb-2">
+              Select Your Preferred Reading Desks
+            </label>
+            <p className="text-xs text-[#A8988B] mb-3">
+              We'll tailor your morning front page around your curiosity:
+            </p>
             <div className="flex flex-wrap gap-2">
-              {CATEGORIES.map(category => (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => handleCategoryChange(category)}
-                  className={`px-3 py-1.5 rounded-full text-xs sm:text-sm border transition-colors ${
-                    preferredCategories.includes(category)
-                      ? 'bg-primary-600 text-white border-primary-600'
-                      : 'bg-white text-gray-600 border-gray-200 hover:border-primary-400'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+              {CATEGORIES.map(category => {
+                const isSelected = preferredCategories.includes(category.name);
+                return (
+                  <button
+                    key={category.name}
+                    type="button"
+                    onClick={() => handleCategoryChange(category.name)}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all active:scale-95 ${
+                      isSelected
+                        ? 'bg-[#E07A5F] text-white border-[#C65D42] shadow-xs'
+                        : 'bg-[#FAF6F0] text-[#736257] border-[#EBE3D7] hover:border-[#E07A5F] hover:bg-[#FAECE5]'
+                    }`}
+                  >
+                    <span>{category.name}</span>
+                    {isSelected && <Check className="w-3.5 h-3.5 ml-0.5 stroke-[2.5]" />}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary-600 text-white font-semibold py-3 px-4 rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed text-sm sm:text-base mt-2"
+            className="w-full inline-flex items-center justify-center gap-2 bg-[#E07A5F] hover:bg-[#C65D42] text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-cozy-sm hover:shadow-cozy-md disabled:opacity-60 disabled:cursor-not-allowed text-sm pt-3"
           >
-            {loading ? 'Creating Account...' : 'Create Account'}
+            <Coffee className="w-4 h-4" />
+            <span>{loading ? 'Issuing Pass...' : 'Issue My Reading Pass'}</span>
           </button>
         </form>
 
-        <p className="mt-5 text-center text-sm text-gray-500">
-          Already have an account?{' '}
-          <Link to="/login" className="text-primary-600 font-semibold hover:underline">
-            Sign in
+        <div className="mt-8 pt-6 border-t border-[#F5EFE6] text-center text-xs text-[#736257]">
+          <span>Already holding a reading pass? </span>
+          <Link
+            to="/login"
+            className="font-semibold text-[#C65D42] hover:text-[#943C25] hover:underline"
+          >
+            Sign in to your nook →
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );
